@@ -1,0 +1,168 @@
+\documentclass[a4paper,14pt]{extarticle}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=1.5cm,top=2cm,bottom=2cm}
+\usepackage{float}
+\floatplacement{figure}{H}
+\floatplacement{table}{H}
+\usepackage{caption}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,fit}
+\emergencystretch=4em
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    {\large Санкт-Петербургский политехнический университет Петра Великого\\
+    Институт компьютерных наук и технологий\\
+    Высшая школа программной инженерии\par}
+    \vspace{4.5cm}
+    {\Large Курсовая работа\par}
+    \vspace{0.6cm}
+    {\large Графическое приложение для заданий 1--4\par}
+    \vspace{4.5cm}
+    \begin{flushright}
+        Выполнил: студент группы в5130904/40321 \\
+        {\hspace{5cm}} Озолин М. А.
+    \end{flushright}
+    \vfill
+    {\large Санкт-Петербург \\ 2026 г.\par}
+\end{titlepage}
+
+\section*{Перечень выполненных работ}
+
+Приложение лежит в каталоге \texttt{oop-coursework}. Классы заданий 1--4 перенесены из соседних каталогов \texttt{oop-lab-01}, \texttt{oop-lab-02}, \texttt{oop-lab-03} и \texttt{oop-lab-04} в пакеты \texttt{coursework.lab1}--\texttt{coursework.lab4}. Консольная печать убрана: строки попадают в \texttt{TextArea}, у которой вызван \texttt{setEditable(false)}.
+
+\begin{enumerate}
+    \item Оболочка на JavaFX. Точка входа \texttt{CourseworkApp}. Окно собирает \texttt{MainWindow}: слева список из четырёх заданий, справа форма выбранного задания. У каждой формы свой \texttt{OutputPane}: нередактируемая область и кнопка «Очистить». Класс реализует \texttt{LineWriter}. Герой и автомобиль получают его и пишут в область своей формы.
+
+    \item Задание 1, паттерн «стратегия». \texttt{Hero} хранит имя и ссылку на \texttt{MoveStrategy}. Реализации: \texttt{WalkStrategy}, \texttt{HorseRideStrategy}, \texttt{PigRideStrategy}, \texttt{WingsFlyStrategy}. Поле имени стоит слева, кнопка «Задать имя» справа от него. Список способов без пустого пункта. При открытии формы выбран первый, \texttt{WalkStrategy} («пешком»), и эта стратегия уже записана герою. Кнопка «Выбрать способ» стоит справа от списка и подменяет стратегию у того же героя. Ниже поля «Откуда» и «Куда» и кнопка «Переместиться». Следующее перемещение идёт уже новым способом. Текст пути возвращает стратегия. \texttt{Hero.move} дописывает имя и название способа и отдаёт строку в \texttt{LineWriter}.
+
+    \item Задание 2, аннотация и вызов закрытых методов. Аннотация \texttt{Repeat} хранит целое число повторов. У \texttt{Automobile} есть открытые, защищённые и закрытые методы, часть помечена \texttt{@Repeat}. \texttt{MethodInvoker.invokeAnnotatedHidden} обходит методы класса, оставляет \texttt{protected} и \texttt{private} с этой аннотацией и вызывает каждый столько раз, сколько указано в аннотации. Имена методов и список параметров в вызывающем коде не перечислены: аргумент выбирается в \texttt{argumentFor} по классу параметра. В форме задаются регистрационный номер и образцы для \texttt{String}, \texttt{int} и \texttt{long} (одно поле), \texttt{double}, \texttt{boolean} и \texttt{Fuel}. Образцы собраны в \texttt{SampleValues}. \texttt{public}-метод \texttt{drive} тоже аннотирован, в протоколе для него пишется пропуск. Сообщения методов идут в \texttt{LineWriter}.
+
+    \item Задание 3, переводчик. Файл словаря выбирается диалогом. Формат строки: «слово или выражение | перевод». Пустые строки и строки, которые начинаются с «;», пропускаются. Чужой формат даёт \texttt{InvalidFileFormatException}. Нет файла, каталог вместо файла и ошибка чтения дают \texttt{FileReadException}. \texttt{Translator} не смотрит на регистр. Если подходят несколько фраз, берётся самая длинная левая часть. Текст для перевода либо набирается в поле, либо читается из второго файла, источник переключается радиокнопкой. Кнопка «Пример» подставляет \texttt{src/main/resources/samples/dictionary.txt} и фразу из условия. Перевод и текст исключения пишутся в область вывода.
+
+    \item Задание 4, Stream API. Класс \texttt{StreamTasks} считает среднее списка целых, приводит строки к верхнему регистру и добавляет префикс \texttt{\_new\_}, возвращает квадраты чисел с единственным вхождением, берёт последний элемент коллекции, суммирует чётные числа массива и строит \texttt{Map}: ключ, первый символ строки, значение, её остаток. Методы ничего не печатают. В форме выбирается метод и вводятся его данные. Результат дописывается в область вывода. Пустая коллекция у последнего элемента даёт \texttt{NoSuchElementException} с текстом «Коллекция пуста». Повтор первого символа даёт \texttt{IllegalStateException}. Сообщение исключения тоже идёт в область вывода.
+
+\end{enumerate}
+
+\section*{Диаграмма классов}
+
+На рисунке~\ref{fig:shell} показана оболочка. \texttt{CourseworkApp} открывает окно. \texttt{MainWindow} держит четыре панели и показывает одну из них по выбору в списке. Каждая панель пишет в \texttt{OutputPane}. Стрелка с пустым треугольником на рисунках~\ref{fig:shell} и~\ref{fig:domain} означает реализацию интерфейса. Обычная стрелка означает, что класс обращается к другому.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+    \begin{tikzpicture}[
+        font=\footnotesize,
+        cls/.style={draw, align=center, fill=white, inner sep=4pt, minimum height=9mm},
+        use/.style={-{Stealth[length=2mm]}, thin},
+        impl/.style={-{Triangle[open, length=2.6mm]}, thin}
+    ]
+        \node[cls] (app) at (0,0) {\textbf{CourseworkApp}};
+        \node[cls] (win) at (4.6,0) {\textbf{MainWindow}};
+        \node[cls] (p1) at (0,-2.1) {\textbf{Lab1Pane}};
+        \node[cls] (p2) at (3.5,-2.1) {\textbf{Lab2Pane}};
+        \node[cls] (p3) at (7.0,-2.1) {\textbf{Lab3Pane}};
+        \node[cls] (p4) at (10.5,-2.1) {\textbf{Lab4Pane}};
+        \node[cls] (out) at (5.2,-4.2) {\textbf{OutputPane}};
+        \node[cls] (writer) at (9.6,-4.2) {\textbf{LineWriter}\\ \texttt{<<interface>>}};
+
+        \draw[use] (app) -- (win);
+        \draw[use] (win) -- (p1);
+        \draw[use] (win) -- (p2);
+        \draw[use] (win) -- (p3);
+        \draw[use] (win) -- (p4);
+        \draw[use] (p1) -- (out);
+        \draw[use] (p2) -- (out);
+        \draw[use] (p3) -- (out);
+        \draw[use] (p4) -- (out);
+        \draw[impl] (out) -- (writer);
+    \end{tikzpicture}%
+    }
+    \caption{Оболочка приложения}
+    \label{fig:shell}
+\end{figure}
+
+На рисунке~\ref{fig:domain} классы заданий разложены по четырём рамкам. Панель задания обращается к главному классу своей лабораторной. \texttt{Hero} и \texttt{Automobile} дополнительно пишут в \texttt{LineWriter}: на рисунке~\ref{fig:shell} этот интерфейс уже показан у \texttt{OutputPane}, здесь стрелки к нему не повторяются.
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\textwidth}{!}{%
+    \begin{tikzpicture}[
+        font=\scriptsize,
+        cls/.style={draw, align=center, fill=white, inner sep=3pt},
+        use/.style={-{Stealth[length=1.7mm]}, thin},
+        impl/.style={-{Triangle[open, length=2.2mm]}, thin},
+        frame/.style={draw, dashed, inner sep=8pt, rounded corners=2pt}
+    ]
+        \node[cls] (l1) at (1.6,0) {\textbf{Lab1Pane}};
+        \node[cls] (hero) at (1.6,-1.4) {\textbf{Hero}};
+        \node[cls] (ms) at (1.6,-2.8) {\textbf{MoveStrategy}\\ \texttt{<<interface>>}};
+        \node[cls, align=left] (st) at (1.6,-4.55) {%
+            \textbf{WalkStrategy}\\
+            \textbf{HorseRideStrategy}\\
+            \textbf{PigRideStrategy}\\
+            \textbf{WingsFlyStrategy}};
+        \draw[use] (l1) -- (hero);
+        \draw[use] (hero) -- (ms);
+        \draw[impl] (st) -- (ms);
+        \node[frame, fit=(l1)(hero)(ms)(st), label={[font=\scriptsize]above:Задание 1}] {};
+
+        \node[cls] (l2) at (8.0,0) {\textbf{Lab2Pane}};
+        \node[cls] (inv) at (6.3,-1.7) {\textbf{MethodInvoker}};
+        \node[cls] (car) at (9.7,-1.7) {\textbf{Automobile}};
+        \node[cls] (sample) at (6.3,-3.4) {\textbf{SampleValues}};
+        \node[cls] (fuel) at (8.5,-3.4) {\textbf{Fuel}\\ \texttt{<<enum>>}};
+        \node[cls] (rep) at (10.9,-3.4) {\textbf{Repeat}\\ \texttt{<<annotation>>}};
+        \draw[use] (l2) -- (inv);
+        \draw[use] (l2) -- (car);
+        \draw[use] (inv) -- (car);
+        \draw[use] (inv) -- (sample);
+        \draw[use] (car) -- (fuel);
+        \draw[use] (car) -- (rep);
+        \node[frame, fit=(l2)(inv)(car)(sample)(fuel)(rep), label={[font=\scriptsize]above:Задание 2}] {};
+
+        \node[cls] (l3) at (2.6,-7.3) {\textbf{Lab3Pane}};
+        \node[cls] (reader) at (0.4,-8.9) {\textbf{DictionaryReader}};
+        \node[cls] (tr) at (5.3,-8.9) {\textbf{Translator}};
+        \node[cls] (dict) at (5.3,-10.4) {\textbf{Dictionary}};
+        \node[cls] (entry) at (5.3,-11.7) {\textbf{DictionaryEntry}};
+        \node[cls, align=center] (ex) at (0.4,-11.7) {%
+            \textbf{FileReadException}\\
+            \textbf{InvalidFileFormatException}};
+        \draw[use] (l3) -- (reader);
+        \draw[use] (l3) -- (tr);
+        \draw[use] (tr) -- (dict);
+        \draw[use] (dict) -- (entry);
+        \draw[use] (reader) |- (dict);
+        \draw[use] (reader) -- (ex);
+        \node[frame, fit=(l3)(reader)(tr)(dict)(entry)(ex), label={[font=\scriptsize]above:Задание 3}] {};
+
+        \node[cls] (l4) at (9.2,-8.9) {\textbf{Lab4Pane}};
+        \node[cls, align=left] (stream) at (9.2,-11.3) {%
+            \textbf{StreamTasks}\\
+            \texttt{average}\\
+            \texttt{uppercaseWithPrefix}\\
+            \texttt{squaresOfUnique}\\
+            \texttt{lastElement}\\
+            \texttt{sumOfEvens}\\
+            \texttt{toMapByFirstChar}};
+        \draw[use] (l4) -- (stream);
+        \node[frame, fit=(l4)(stream), label={[font=\scriptsize]above:Задание 4}] {};
+    \end{tikzpicture}%
+    }
+    \caption{Классы заданий 1--4}
+    \label{fig:domain}
+\end{figure}
+
+\texttt{MethodInvoker.create} собирает объект по типам параметров конструктора и пишет строку о вызове в \texttt{LineWriter}. Форма задания 2 этим методом не пользуется: номер автомобиля берётся из отдельного поля, а образцы аргументов идут только в аннотированные методы. \texttt{DictionaryEntry} виден внутри пакета \texttt{coursework.lab3.dictionary}, снаружи словаря его нет.
+
+\end{document}
